@@ -9,6 +9,11 @@ import subprocess
 app = Flask(__name__)
 md = MarkItDown()
 
+
+def get_debug_mode() -> bool:
+    """Return whether Flask debug mode is enabled via environment."""
+    return os.getenv("FLASK_DEBUG", "false").strip().lower() in {"1", "true", "yes", "on"}
+
 def preprocess_html(html_content):
     """
     Preprocess HTML to improve markdown conversion.
@@ -110,4 +115,4 @@ def health():
     return jsonify({'status': 'healthy'}), 200
 
 if __name__ == '__main__':
-    app.run(host='127.0.0.1', port=5000, debug=True)
+    app.run(host='127.0.0.1', port=5000, debug=get_debug_mode())

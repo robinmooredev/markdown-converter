@@ -23,6 +23,7 @@ For other platforms, download from https://pandoc.org/installing.html.
 Start the server:
 ```bash
 source venv/bin/activate
+FLASK_DEBUG=true python app.py  # local development
 python app.py
 ```
 
@@ -47,10 +48,13 @@ curl -X POST -F "file=@document.docx" http://127.0.0.1:5000/convert
 **Response:**
 ```json
 {
-  "markdown": "# Document content in markdown with ~~tracked deletions~~ preserved...",
+  "markdown": "Tracked changes are preserved as inline HTML spans (e.g., <span class=\"deletion\">...</span>).",
   "filename": "document.docx"
 }
 ```
+
+For DOCX files with tracked changes, conversion uses Pandoc with `--track-changes=all`.
+This preserves insertions/deletions semantically in the markdown output.
 
 ### GET /health
 Health check endpoint.
